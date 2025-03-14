@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Política de Privacidade - iLover</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    .pdf-page {
+      border: 1px solid #ddd;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>iLover - Política de Privacidade</h1>
+  <p style="font-size: large;">
+    Caso queira solicitar <strong>EXCLUSÃO DE CONTA</strong> ou de alguma informação no nosso aplicativo, entre em contato pelo email:
+    <strong>ilover.comunicacao@gmail.com</strong>
+  </p>
+  <div id="pdf-container"></div>
+
+  <script>
+    const url = 'politica_de_privacidade.pdf'; // Caminho do PDF
+    const container = document.getElementById('pdf-container'); // Container para as páginas do PDF
+
+    pdfjsLib.getDocument(url).promise.then(pdf => {
+      const totalPages = pdf.numPages;
+
+      // Iterar por todas as páginas do PDF
+      for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
+        pdf.getPage(pageNum).then(page => {
+          // Criar um elemento <canvas> para cada página
+          const canvas = document.createElement('canvas');
+          canvas.className = 'pdf-page';
+          container.appendChild(canvas);
+
+          const ctx = canvas.getContext('2d');
+          const viewport = page.getViewport({ scale: 1.5 });
+
+          canvas.width = viewport.width;
+          canvas.height = viewport.height;
+
+          const renderContext = {
+            canvasContext: ctx,
+            viewport: viewport,
+          };
+
+          page.render(renderContext);
+        });
+      }
+    });
+  </script>
+</body>
+</html>
